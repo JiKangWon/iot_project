@@ -4,7 +4,7 @@ from .models import *
 # ! LECTURER:
 
 #! LOGIN:
-def get_login(request):
+def get_login_lecturer(request):
     error = None
     context = {}
     if request.method == 'POST':
