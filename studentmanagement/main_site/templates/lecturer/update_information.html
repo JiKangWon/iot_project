@@ -1,0 +1,36 @@
+{% extends "base/base.html" %}
+{% block style %}
+{% endblock style %}
+{% block content %}
+<h1 >Lecturer {{lecturer.name}}</h1>
+<form method='POST'>
+    {% csrf_token %}
+    <label for='name'>
+        Name:
+        <input type='text' name='name' value='{{lecturer.name}}'>
+    </label>    
+    <label for='birthday'>
+        Birthday:
+        <input type='date' name='birthday' value='{{lecturer.birth_day | date:'Y-m-d'}}'>
+    </label>
+    <label for='email'>
+        Email:
+        <input type='email' name='email' value='{{lecturer.email}}'>
+    </label>
+    <label for='phone'>
+        Phone:
+        <input type='text' name='phone' value='{{lecturer.phone_number}}'>
+    </label>
+    <label for='gender'>
+        Gender:
+        <select type='text' name='gender'>
+            <option value='male'> male </option>
+            <option value='female'> female </option>
+            <option value='other'> other </option>
+        </select>
+    </label>
+    <button type='submit'>SAVE</button>
+</form>
+{% endblock content %}
+{% block script %}
+{% endblock script %}

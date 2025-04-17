@@ -20,6 +20,16 @@ from main_site import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.get_login_lecturer, name='get_login'),
-    path('home/<int:lecturer_id>/', views.get_home, name='get_home'),
+    # ! LECTURER:
+    path('lecturer/', views.get_login_lecturer, name='get_login_lecturer'),
+    path('lecturer/home/<int:lecturer_id>/', views.get_home_lecturer, name='get_home_lecturer'),
+    path('lecturer/class_management/<int:class_id>/', views.get_class_management_lecturer, name='get_class_management_lecturer'),
+    path('lecturer/information/<int:lecturer_id>/', views.get_information_lecturer, name='get_information_lecturer'),
+    path('lecturer/change_password/<int:lecturer_id>/', views.get_change_password_lecturer, name='get_change_password_lecturer'),
+    path('lecturer/update/point/<int:class_id>', views.get_update_point, name='get_update_point'),
+    path('lecturer/update/information/<int:lecturer_id>', views.get_update_information_lecturer, name='get_update_information_lecturer'),
+    # ! STUDENT:
+    path('', views.get_login_student, name='get_login_student'),
+    path('student/home/<int:student_id>/', views.get_home_student, name='get_home_student'),
+    path('student/information/<int:student_id>', views.get_information_student, name='get_information_student'),
 ]

@@ -1,1 +1,15 @@
-Hello, {{lecturer.name}}
+{% extends "base/base.html" %}
+{% block style %}
+{% endblock style %}
+{% block content %}
+<div class="classes-link-container">
+    {% for class_obj in classes %}
+        <a href="{% url "get_class_management_lecturer" class_obj.id %}"> {{class_obj.subject.name}}_HCMUTE{{class_obj.id}} </a>
+    {% endfor %}
+</div>
+<a href="{% url 'get_information_lecturer' lecturer.id%}">Thông tin cá nhân</a>
+<a href="{% url 'get_change_password_lecturer' lecturer.id %}">Đổi mật khẩu</a>
+<a href="{% url 'get_login_lecturer' %}">Đăng xuất</a>
+{% endblock content %}
+{% block script %}
+{% endblock script %}

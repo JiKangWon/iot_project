@@ -1,0 +1,49 @@
+{% extends "base/base.html" %}
+{% block style %}
+{% endblock style %}
+{% block content %}
+Class : {{ class_obj.subject.name }}
+<a href="{% url "get_update_point" class_obj.id %}">Update point</a>
+<table >
+    <tr >
+        <th >Ordinal</th>
+        <th >Name</th>
+        <th >Middle term point</th>
+        <th >Final term point</th>
+        <th >Total point</th>
+        <th >Classification</th>
+        {% for attendance_date in attendance_date_list %}
+        <th >{{ attendance_date.date | date:"d-m" }}</th>
+        {% endfor %}
+    </tr>
+    {% for class_student in class_student_data %}
+    <tr >
+        <td >{{ forloop.counter }}</td>
+        <td >
+            <a href="{% url "get_information_student" class_student.class_student.student.id %}">{{ class_student.class_student.student.name }}</a>
+        </td>
+        <td >{{ class_student.class_student.middle_term_point }}</td>
+        <td >{{ class_student.class_student.final_term_point }}</td>
+        <td >
+            {% if class_student.class_student.get_total_point %}
+                {{ class_student.class_student.get_total_point }}            
+            {% endif %}
+        </td>
+        <td >
+            {% if class_student.class_student.get_classification %}
+                {{ class_student.class_student.get_classification}}            
+            {% endif %}
+        </td>
+        {% for attendance in class_student.attendance %}
+        <td >
+            {% if attendance %}
+            {{ attendance}}            
+            {% endif %}
+        </td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+{% endblock content %}
+{% block script %}
+{% endblock script %}

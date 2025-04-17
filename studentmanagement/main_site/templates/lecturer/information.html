@@ -1,0 +1,31 @@
+{% extends "base/base.html" %}
+{% block style %}
+{% endblock style %}
+{% block content %}
+<h1 >Lecturer {{lecturer.name}}</h1>
+<table >
+    <tr >
+        <th >Username</th>
+        <th >Name</th>
+        <th >Birthday</th>
+        <th >Email</th>
+        <th >Phone</th> 
+        <th >Gender</th>
+        <th >Start at</th>
+        <th >Salary</th>
+    </tr>
+    <tr >
+        <td >{{ lecturer.username }}</td>
+        <td >{{ lecturer.name }}</td>
+        <td >{{ lecturer.birth_day|date:"d-m-Y" }}</td>
+        <td >{{ lecturer.email }}</td>
+        <td >{{ lecturer.phone }}</td>
+        <td >{{ lecturer.gender}}</td>
+        <td >{{ lecturer.start_at|date:"d-m-Y" }}</td>
+        <td >{{ lecturer.formatted_salary }}</td>
+    </tr>
+    <a href="{% url "get_update_information_lecturer" lecturer.id %}">Update</a>
+</table>
+{% endblock content %}
+{% block script %}
+{% endblock script %}

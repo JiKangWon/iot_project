@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Lecturer, Student, Term, Subject, Class_Student, Attendance
+from .models import *
 # Register your models here.
 
 @admin.register(Lecturer)
@@ -26,13 +26,24 @@ class SubjectAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     list_filter = ('credits',)
 
+@admin.register(Class)
+class ClassAdmin(admin.ModelAdmin):
+    list_display = ('term', 'lecturer', 'subject','sessions_number', 'start_day', 'start_time', 'end_time')
+    search_fields = ('term__name', 'lecturer__name', 'subject__name')
+    list_filter = ('term', 'lecturer', 'subject')
+
 @admin.register(Class_Student)
 class ClassStudentAdmin(admin.ModelAdmin):
-    list_display = ('class_code', 'term', 'lecturer', 'student', 'subject', 'start_day', 'sessions_number', 'middle_term_point', 'final_term_point')
-    search_fields = ('class_code',)
-    list_filter = ('term', 'subject', 'lecturer')
+    list_display = ('class_obj', 'student', 'middle_term_point', 'final_term_point')
+    search_fields = ('subject',)
+   
 
 @admin.register(Attendance)
 class AttendanceAdmin(admin.ModelAdmin):
     list_display = ('class_student', 'session_order', 'status')
     list_filter = ('status',)
+
+@admin.register(Attendance_Date)
+class AttendanceDateAdmin(admin.ModelAdmin):
+    list_display = ('class_obj', 'date', 'session_order')
+    list_filter = ('date', 'session_order')

@@ -1,0 +1,28 @@
+{% extends "base/base.html" %}
+{% block style %}
+{% endblock style %}
+{% block content %}
+Class {{class_obj.subject.name}}_HCMUTE{{class_obj.id}}
+<form method="POST">
+    {% csrf_token %}
+    <table >
+        <tr >
+            <th >Ordinal</th>
+            <th >Name </th>
+            <th >Middle term point</th>
+            <th >Final term point</th>
+        </tr>
+        {% for class_student in class_student_list %}
+        <tr >
+            <td > {{forloop.counter}} </td>
+            <td > {{class_student.student.name}} </td>
+            <td > <input type="number" name="middle_term_point_{{class_student.id}}" value="{{class_student.middle_term_point}}"> </td>
+            <td > <input type="number" name="final_term_point_{{class_student.id}}" value="{{class_student.final_term_point}}"> </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <button >SAVE </button>
+</form>
+{% endblock content %}
+{% block script %}
+{% endblock script %}

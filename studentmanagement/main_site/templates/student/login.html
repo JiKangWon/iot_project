@@ -1,0 +1,24 @@
+{% extends "base/base.html" %}
+{% block style %}
+{% endblock style %}
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    <label for="username">
+        Username:
+        <input type="text" id="username" name="username" required>
+    </label>
+    <label for="password">
+        Password:
+        <input type="password" id="password" name="password" required>
+    </label>
+    {% if error %}
+    <script >
+        alert("{{ error }}");
+    </script>
+    {% endif %}
+    <button type="submit">Login</button>
+</form>
+{% endblock content %}
+{% block script %}
+{% endblock script %}
