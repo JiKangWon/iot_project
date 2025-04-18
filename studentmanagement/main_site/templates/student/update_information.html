@@ -1,0 +1,36 @@
+{% extends "base/base.html" %}
+{% block style %}
+{% endblock style %}
+{% block content %}
+<h1 >Student {{student.name}}</h1>
+<form method='POST'>
+    {% csrf_token %}
+    <label for='name'>
+        Name:
+        <input type='text' name='name' value='{{student.name}}'>
+    </label>    
+    <label for='birthday'>
+        Birthday:
+        <input type='date' name='birthday' value='{{student.birth_day | date:"Y-m-d"}}'>
+    </label>
+    <label for='email'>
+        Email:
+        <input type='email' name='email' value='{{student.email}}'>
+    </label>
+    <label for='phone'>
+        Phone:
+        <input type='text' name='phone' value='{{student.phone_number}}'>
+    </label>
+    <label for='gender'>
+        Gender:
+        <select name='gender'>
+            <option value='male' {% if student.gender == 'male' %}selected{% endif %}>male</option>
+            <option value='female' {% if student.gender == 'female' %}selected{% endif %}>female</option>
+            <option value='other' {% if student.gender == 'other' %}selected{% endif %}>other</option>
+        </select>
+    </label>
+    <button type='submit'>SAVE</button>
+</form>
+{% endblock content %}
+{% block script %}
+{% endblock script %}

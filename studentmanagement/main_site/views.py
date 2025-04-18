@@ -135,7 +135,7 @@ def get_login_student(request):
         password = request.POST.get('password')
         try:
             student = Student.objects.get(username=username, password=password)
-            return redirect('get_home_student', student_id=student.id)
+            return redirect('home_student', student_id=student.id)
         except Student.DoesNotExist:
             error = 'Invalid username or password'
     context = {'error': error}
@@ -151,7 +151,8 @@ def get_home_student(request, student_id):
         return render(request, 'student/home.html', context)
     except Student.DoesNotExist:
         error = 'Student not found'
-    context = {'error': error}
+        context = {'error': error}
+        return render(request, 'student/home.html', context)
 
 # ! INFORMATION:
 def get_information_student(request, student_id):
@@ -160,3 +161,101 @@ def get_information_student(request, student_id):
     student = Student.objects.filter(id=student_id).first()
     context['student'] = student
     return render(request, 'student/information.html', context)
+
+#! CHANGE PASSWORD:
+def get_change_password_student(request, student_id):
+    error = None
+    context = {}
+    student = Student.objects.filter(id=student_id).first()
+    context['student'] = student
+    if request.method == 'POST':
+        old_password = request.POST.get('old_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+        if student.password != old_password:
+            error = 'Old password is incorrect!'
+        elif new_password != confirm_password:
+            error = 'New password and confirm password do not match!'
+        else:
+            student.password = new_password
+            student.save()
+            return redirect('get_login_student')
+    context['error'] = error
+    return render(request, 'student/change_password.html', context)
+
+def get_update_information_student(request, student_id):
+    context = {}
+    student = Student.objects.filter(id=student_id).first()
+    context['student'] = student
+    if request.method == 'POST':
+        student.name = request.POST.get('name')
+        birthday = request.POST.get('birthday')
+        student.birth_day = datetime.strptime(birthday, '%Y-%m-%d').date()
+        student.email = request.POST.get('email')
+        student.phone_number = request.POST.get('phone')
+        student.gender = request.POST.get('gender')
+        student.save()
+        return redirect('get_information_student', student_id=student.id)
+    return render(request, 'student/update_information.html', context)
+
+#Class
+def get_class_information_student(request, class_id, student_id):
+    context = {}
+
+    # Lấy thông tin lớp học
+    class_obj = Class.objects.filter(id=class_id).first()
+    if not class_obj:
+        context['error_message'] = 'Lớp học không tồn tại.'
+        return render(request, 'student/class_information.html', context)
+
+    context['class_obj'] = class_obj
+
+    # Kiểm tra sinh viên có học lớp này không
+    class_student = Class_Student.objects.filter(
+        class_obj=class_obj,
+        student__id=student_id
+    ).first()
+
+    if not class_student:
+        context['error_message'] = 'Sinh viên không học lớp này.'
+        return render(request, 'student/class_information.html', context)
+
+    # Lấy danh sách các buổi học của lớp
+    attendance_date_list = Attendance_Date.objects.filter(class_obj=class_obj).order_by('session_order')
+
+    # Lấy các bản ghi điểm danh của sinh viên trong lớp này
+    attendance_records = Attendance.objects.filter(class_student=class_student)
+
+    # Tạo dictionary để tra nhanh trạng thái điểm danh theo session_order
+    attendance_dict = {att.session_order: att.status for att in attendance_records}
+
+    # Gộp thông tin từng buổi học với trạng thái điểm danh
+    attendance_data = []
+    for att_date in attendance_date_list:
+        if att_date.date <= timezone.now().date():
+            status = attendance_dict.get(att_date.session_order, None)
+        else:
+            status = None  # Buổi học tương lai
+        attendance_data.append((att_date.session_order, att_date.date, status))
+
+    # Truyền dữ liệu về điểm số và phân loại
+    context['class_student'] = class_student
+    context['attendance_data'] = attendance_data
+    context['total_point'] = class_student.get_total_point()
+    context['classification'] = class_student.get_classification()
+
+    return render(request, 'student/class_information.html', context)
+
+
+
+def home_student(request, student_id):
+    context = {}
+    student = Student.objects.filter(id=student_id).first()
+    context['student'] = student
+
+    # Lấy các lớp mà sinh viên đã tham gia
+    class_students = Class_Student.objects.filter(student=student)
+    classes = [cs.class_obj for cs in class_students]
+    context['classes'] = classes
+
+    return render(request, 'student/home.html', context)

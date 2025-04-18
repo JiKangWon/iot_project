@@ -29,7 +29,12 @@ urlpatterns = [
     path('lecturer/update/point/<int:class_id>', views.get_update_point, name='get_update_point'),
     path('lecturer/update/information/<int:lecturer_id>', views.get_update_information_lecturer, name='get_update_information_lecturer'),
     # ! STUDENT:
-    path('', views.get_login_student, name='get_login_student'),
-    path('student/home/<int:student_id>/', views.get_home_student, name='get_home_student'),
+    path('student/', views.get_login_student, name='get_login_student'),
+    path('student/home/<int:student_id>/', views.home_student, name='home_student'),
+    path('student/class_information/<int:class_id>/<int:student_id>/', views.get_class_information_student, name='get_class_information_student'),
     path('student/information/<int:student_id>', views.get_information_student, name='get_information_student'),
+    path('student/update/information/<int:student_id>', views.get_update_information_student, name='get_update_information_student'),
+    path('student/change_password/<int:student_id>/', views.get_change_password_student, name='get_change_password_student'),
+    
+
 ]
