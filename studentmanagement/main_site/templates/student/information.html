@@ -1,1 +1,35 @@
-Student {{ student.name }}
+{% extends "base/base.html" %}
+{% block style %}
+{% endblock style %}
+
+{% block content %}
+<h1>Student {{ student.name }}</h1>
+<table border="1">
+    <tr>
+        <th>Username</th>
+        <th>Name</th>
+        <th>Birthday</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Gender</th>
+        <th>Start at</th>
+        <th>Credits</th>
+        <th>Graduate at</th>
+    </tr>
+    <tr>
+        <td>{{ student.username }}</td>
+        <td>{{ student.name }}</td>
+        <td>{{ student.birth_day|date:"d-m-Y" }}</td>
+        <td>{{ student.email }}</td>
+        <td>{{ student.phone_number }}</td>
+        <td>{{ student.gender }}</td>
+        <td>{{ student.start_at|date:"d-m-Y" }}</td>
+        <td>{{ student.credits }}</td>
+        <td>{{ student.graduate_at|date:"d-m-Y" }}</td>
+    </tr>
+    <a href="{% url 'get_update_information_student' student.id %}">Update</a>
+</table>
+{% endblock content %}
+
+{% block script %}
+{% endblock script %}

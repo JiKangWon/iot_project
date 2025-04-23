@@ -1,0 +1,52 @@
+{% extends "base/base.html" %}
+{% block content %}
+<h1>Class: {{ class_obj.subject.name }}</h1>
+
+{% if class_student %}
+    <h2>Student: {{ class_student.student.name }}</h2>
+
+    <table border="1">
+        <tr>
+            <th>Session number</th>
+            <th>Date</th>
+            <th>Attendance status</th>
+        </tr>
+        {% for session_order, date, status in attendance_data %}
+            <tr>
+                <td>Session number{{ session_order }}</td>
+                <td>{{ date }}</td>
+                <td>
+                    {% if status %}
+                        {% if status == "present" %}present
+                        {% elif status == "absent" %}absent
+                        {% elif status == "late" %}late
+                        {% else %}{{ status }}
+                        {% endif %}
+                    {% else %}
+                        no attendance
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h3>Grade:</h3>
+    <table border="1">
+        <tr>
+            <th>Midterm grade</th>
+            <th>Final grade</th>
+            <th>Total</th>
+            <th>Classification</th>
+        </tr>
+        <tr>
+            <td>{{ class_student.middle_term_point }}</td>
+            <td>{{ class_student.final_term_point }}</td>
+            <td>{{ class_student.get_total_point }}</td>
+            <td>{{ class_student.get_classification }}</td>
+        </tr>
+    </table>
+{% else %}
+    <p>Bạn không tham gia lớp học này.</p>
+{% endif %}
+
+{% endblock content %}
