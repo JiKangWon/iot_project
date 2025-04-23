@@ -129,6 +129,8 @@ class Attendance_Date(models.Model):
     class_obj = models.ForeignKey(Class, on_delete=models.SET_NULL, null=True)
     date = models.DateField()
     session_order = models.IntegerField()
+    start_time = models.TimeField(null=True)
+    end_time = models.TimeField(null=True)
     def __str__(self):
         if self.class_obj:
             return f"{self.class_obj.subject.name} - {self.date} - {self.session_order}"

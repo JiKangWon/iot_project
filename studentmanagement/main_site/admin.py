@@ -10,7 +10,7 @@ class LecturerAdmin(admin.ModelAdmin):
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ('username', 'name', 'email', 'gender', 'start_at', 'credits', 'graduate_at')
+    list_display = ('id','username', 'name', 'email', 'gender', 'start_at', 'credits', 'graduate_at')
     search_fields = ('username', 'name', 'email')
     list_filter = ('gender', 'start_at', 'graduate_at')
 
@@ -45,5 +45,5 @@ class AttendanceAdmin(admin.ModelAdmin):
 
 @admin.register(Attendance_Date)
 class AttendanceDateAdmin(admin.ModelAdmin):
-    list_display = ('class_obj', 'date', 'session_order')
+    list_display = ('class_obj', 'date', 'session_order', 'start_time', 'end_time')
     list_filter = ('date', 'session_order')

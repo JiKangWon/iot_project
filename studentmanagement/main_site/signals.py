@@ -19,5 +19,7 @@ def create_attendance_date(sender, instance, created, **kwargs):
             Attendance_Date.objects.create(
                 class_obj=instance,
                 date=instance.start_day + timedelta(weeks=session-1),
+                start_time=instance.start_time,
+                end_time=instance.end_time,
                 session_order=session
             )
