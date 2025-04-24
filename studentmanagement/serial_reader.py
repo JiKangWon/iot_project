@@ -2,6 +2,7 @@ import serial
 import time as time_module
 import sys
 import os
+# import requests
 from django.utils import timezone
 from datetime import datetime, time, timedelta
 
@@ -17,7 +18,7 @@ django.setup()
 
 # Import mô hình sau khi thiết lập Django
 from main_site.models import *
-
+DJANGO_URL = 'http://localhost:8000/attendance/checkin/'
 # Kết nối với Arduino
 port = 'COM7'  # Cổng đã xác nhận
 try:
@@ -37,31 +38,20 @@ while True:
             line = ser.readline().decode('utf-8').strip()
             if line.startswith("FINGERPRINT_ID:"):
                 fingerprint_id = int(line.split(":")[1])
-                print(f"Nhận được ID: {fingerprint_id}")
+                print(f'Nhận được sinh viên HCMUTE{fingerprint_id}')
                 student = Student.objects.filter(id=fingerprint_id).first()
-                print(f"Nhận được sinh viên: {student}")
                 terms = Term.objects.all()
                 for term in terms:
                     if term.get_attribute():
-                        print(f"Nhận được học kỳ: {term}")
                         current_date = timezone.now().date()
-                        print(f'Biến current_date: {current_date}')
                         current_time = timezone.now().time()
-                        print(f'Biến current_time: {current_time}')
                         class_student_list = Class_Student.objects.filter(class_obj__term=term, student=student)
-                        print(f"Nhận được các lớp của {student} trong kỳ {term}:")
                         for class_student in class_student_list:
-                            print(f"- {class_student.class_obj}")
                             today = datetime.today()
-                            print(f'Biến today: {today}')
                             current_datetime = datetime.combine(today, current_time)
-                            print(f'Biến current_datetime: {current_datetime}')
                             add_fifteen_minutes = current_datetime + timedelta(minutes=15)
-                            print(f'Biến add_fifteen_minutes: {add_fifteen_minutes}')
                             add_thirty_minutes = current_datetime + timedelta(minutes=30)
-                            print(f'Biến add_thirty_minutes: {add_thirty_minutes}')
                             attendance_date = Attendance_Date.objects.filter(class_obj=class_student.class_obj, date=current_date, start_time__lte=add_fifteen_minutes, end_time__gte=add_thirty_minutes).first()
-                            print(f'Nhận được {attendance_date}')
                             if attendance_date:
                                 attendance = Attendance.objects.filter(class_student=class_student, session_order=attendance_date.session_order).first()
                                 if attendance.status == 'absent':
@@ -73,6 +63,7 @@ while True:
                                     else:
                                         attendance.status = 'late'
                                         attendance.save()
+                                    # response = requests.post(DJANGO_URL, json={'student_id': student_id})
                                     print(f"Điểm danh thành công cho sinh viên {student.name} trong lớp {class_student.class_obj.subject.name} vào ngày {current_date} lúc {current_time}")
                                 break
                         break

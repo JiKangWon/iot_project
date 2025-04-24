@@ -35,6 +35,4 @@ urlpatterns = [
     path('student/information/<int:student_id>', views.get_information_student, name='get_information_student'),
     path('student/update/information/<int:student_id>', views.get_update_information_student, name='get_update_information_student'),
     path('student/change_password/<int:student_id>/', views.get_change_password_student, name='get_change_password_student'),
-    
-
 ]
